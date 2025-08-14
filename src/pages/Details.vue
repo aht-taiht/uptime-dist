@@ -140,6 +140,9 @@
                 </div>
             </div>
 
+            <!-- Monthly Downtime Statistics -->
+            <DowntimeMonthlyTable :monitor-id="monitor.id" />
+
             <!-- Screenshot -->
             <div v-if="monitor.type === 'real-browser'" class="shadow-box">
                 <div class="row">
@@ -236,6 +239,7 @@ import CertificateInfo from "../components/CertificateInfo.vue";
 import { getMonitorRelativeURL } from "../util.ts";
 import { URL } from "whatwg-url";
 import { getResBaseURL } from "../util-frontend";
+import DowntimeMonthlyTable from "../components/DowntimeMonthlyTable.vue";
 
 export default {
     components: {
@@ -249,6 +253,7 @@ export default {
         PingChart,
         Tag,
         CertificateInfo,
+        DowntimeMonthlyTable,
     },
     data() {
         return {
