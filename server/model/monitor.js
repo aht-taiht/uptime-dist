@@ -23,6 +23,7 @@ const Gamedig = require("gamedig");
 const jsonata = require("jsonata");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const UpdateMonthlyUptimeJob = require("../jobs/update-monthly-uptime");
 
 const rootCertificates = rootCertificatesFingerprints();
 
@@ -1011,6 +1012,13 @@ class Monitor extends BeanModel {
 
             log.debug("monitor", `[${this.name}] Store`);
             await R.store(bean);
+
+            // Update monthly uptime statistics
+            try {
+                await UpdateMonthlyUptimeJob.updateCurrentMonthUptime(this.id, bean.time, bean.status);
+            } catch (error) {
+                log.error("monitor", `Failed to update monthly uptime: ${error.message}`);
+            }
 
             log.debug("monitor", `[${this.name}] prometheus.update`);
             this.prometheus?.update(bean, tlsInfo);
